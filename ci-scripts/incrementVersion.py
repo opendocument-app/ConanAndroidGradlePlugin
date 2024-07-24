@@ -5,28 +5,37 @@ from pathlib import Path
 from getVersion import get_version
 
 
+def str_replace_in_file(file, search, replace):
+    r = file.open('r')
+    updated_file_contents = r.read().replace(search, replace)
+    r.close()
+    with open(file, 'w') as w:
+        w.write(updated_file_contents)
+
+
 def main():
-    oldversion = get_version()
-    print("old version:", oldversion)
+    old_version = get_version()
+    print("old version:", old_version)
 
-    version = oldversion.split(".")
-    version[len(version)-1] = str(int(version[len(version)-1]) + 1)
+    version = old_version.split(".")
+    version[len(version) - 1] = str(int(version[len(version) - 1]) + 1)
 
-    newversion = ".".join(version)
-    print("new version:", newversion)
+    new_version = ".".join(version)
+    print("new version:", new_version)
 
     gh_output = os.environ.get('GITHUB_OUTPUT')
     if gh_output:
         with open(gh_output, 'w') as out:
-            print("oldVersion=" + oldversion, file=out)
-            print("newVersion=" + newversion, file=out)
+            print("oldVersion=" + old_version, file=out)
+            print("newVersion=" + new_version, file=out)
 
-    build_gradle_kts = Path(__file__).resolve().parent.parent / "build.gradle.kts"
-    r = build_gradle_kts.open('r')
-    updated_script = r.read().replace("version = \"{}\"".format(oldversion), "version = \"{}\"".format(newversion))
-    r.close()
-    with open(build_gradle_kts, 'w') as w:
-        w.write(updated_script)
+    root_dir = Path(__file__).resolve().parent.parent
+    str_replace_in_file(root_dir / "build.gradle.kts",
+                        "version = \"{}\"".format(old_version),
+                        "version = \"{}\"".format(new_version))
+    str_replace_in_file(root_dir / "README.md",
+                        "id 'app.opendocument.conanandroidgradleplugin' version \"{}\" apply false".format(old_version),
+                        "id 'app.opendocument.conanandroidgradleplugin' version \"{}\" apply false".format(new_version))
 
 
 if __name__ == "__main__":
