@@ -1,0 +1,63 @@
+name: release
+on: workflow_dispatch
+
+permissions:
+  actions: none
+  checks: none
+  contents: write
+  deployments: none
+  issues: none
+  packages: none
+  pull-requests: none
+  repository-projects: none
+  security-events: none
+  statuses: none
+
+jobs:
+  release:
+    environment: Release
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Ref is required for post release version increment commit
+          ref: ${{ github.event.ref }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - run: python ./ci-scripts/getVersion.py
+        id: getVersion
+
+      - run: ./gradlew publishPlugins --validate-only
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+
+      - run: ./gradlew publishPlugins
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: "v${{ steps.getVersion.outputs.version }}"
+          name: "${{ github.event.repository.name }} v${{ steps.getVersion.outputs.version }}"
+          bodyFile: "UpcomingReleaseNotes.md"
+
+      - run: python ./ci-scripts/incrementVersion.py
+        id: postReleaseVersionIncrement
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Post release version increment to ${{ steps.postReleaseVersionIncrement.outputs.newVersion }} (from ${{ steps.postReleaseVersionIncrement.outputs.oldVersion }})"
+          file_pattern: build.gradle.kts
+
+      - run: echo -n > UpcomingReleaseNotes.md
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Post release truncation of UpcomingReleaseNotes.md"
+          file_pattern: UpcomingReleaseNotes.md
