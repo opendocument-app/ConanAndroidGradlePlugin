@@ -27,10 +27,8 @@ import org.gradle.api.Project
 class ConanAndroidGradlePlugin: Plugin<Project> {
     override fun apply(target: Project) {
         val tasks = target.tasks;
-        val conanInstallAllArchesTask = tasks.register("conanInstall")
-        tasks.named("preBuild").get().dependsOn(conanInstallAllArchesTask)
-        target.parent?.tasks?.named("prepareKotlinBuildScriptModel")?.get()?.dependsOn(conanInstallAllArchesTask)
-
+        val preBuild = tasks.named("preBuild").get()
+        val syncTask = target.parent?.tasks?.named("prepareKotlinBuildScriptModel")?.get()
         listOf("armv8", "armv7", "x86", "x86_64").forEach { architecture ->
             val conanInstallTask = tasks.register("conanInstall-$architecture", ConanInstallTask::class.java) { conanInstallTask ->
                 conanInstallTask.arch.set(architecture)
@@ -42,7 +40,8 @@ class ConanAndroidGradlePlugin: Plugin<Project> {
                     conanInstallTask.dependsOn(tasks.named("conanInstall-armv8"))
                 }
             }
-            conanInstallAllArchesTask.get().dependsOn(conanInstallTask)
+            preBuild.dependsOn(conanInstallTask)
+            syncTask?.dependsOn(conanInstallTask)
         }
     }
 }
