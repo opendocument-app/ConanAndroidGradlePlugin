@@ -48,7 +48,7 @@ Conan profile can be either a relative path or an absolute path, it could also b
 
 Plugin applies `arch` setting when calling `conan install`, thus all architectures can share the same profile, if no differentiation is needed - `{ profile.set("android") }`.
 
-Plugin task generate CMake toolchain file, which needs to be included by CMake:
+Plugin also generates CMake toolchain file, which needs to be included by CMake:
 
 ```groovy
 android {
