@@ -2,16 +2,19 @@
 
 ## Why is this needed?
 
-In order to use Conan dependencies in an Android project, `conan install` needs to be executed before CMake tries to find those libraries. This plugin calls `conan install` for all 4 Android's architectures.
+In order to use Conan dependencies in an Android project, `conan install` needs to be executed before CMake tries to find those libraries.
 
 ## How it works
 
-Conan Android Gradle Plugin creates 4 Gradle tasks: `conanInstall-armv7`, `conanInstall-armv8`, `conanInstall-x86`, `conanInstall-x86_64` - one for each architecture, for which `conan install` will be launched.
+Conan Android Gradle Plugin creates 5 Gradle tasks:
 
-`conanInstall` tasks are added as dependencies to module level `preBuild` task and top level `prepareKotlinBuildScriptModel` task, if it's found.
+- Four `conan install` tasks, to install conan dependencies for each architecture: `conanInstall-armv7`, `conanInstall-armv8`, `conanInstall-x86`, `conanInstall-x86_64`.
 
-`preBuild` task is executed before building Android project. `prepareKotlinBuildScriptModel` task is executed when doing Android Studio sync.
+- One additional `GenerateConanToolchainFileTask` task, to generate `build/conan/android_toolchain.cmake`.
 
+Tasks are added as dependencies to module level `preBuild` task and top level `prepareKotlinBuildScriptModel` task, if it is found.
+
+`preBuild` task is executed before building Android project. `prepareKotlinBuildScriptModel` task is Android Studio sync task.
 
 ## How to use
 
@@ -41,9 +44,21 @@ Once the plugin is applied, it needs to be configured. Configuration currently c
 }
 ```
 
-Conan profile can be either a relative path or an absolute path, it could also be a regular conan profile, installed and managed by conan (eg. `default`).
+Conan profile can be either a relative path or an absolute path, it could also be a regular conan profile, installed and managed by conan (e.g. `default`).
 
 Plugin applies `arch` setting when calling `conan install`, thus all architectures can share the same profile, if no differentiation is needed - `{ profile.set("android") }`.
+
+Plugin task generate CMake toolchain file, which needs to be included by CMake:
+
+```groovy
+android {
+    defaultConfig {
+        externalNativeBuild.cmake.arguments(
+            "-DCMAKE_TOOLCHAIN_FILE=build/conan/android_toolchain.cmake"
+        )
+    }
+}
+```
 
 ## Further reading
 

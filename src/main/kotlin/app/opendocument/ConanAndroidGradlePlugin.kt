@@ -29,6 +29,11 @@ class ConanAndroidGradlePlugin: Plugin<Project> {
         val tasks = target.tasks;
         val preBuild = tasks.named("preBuild").get()
         val syncTask = target.parent?.tasks?.named("prepareKotlinBuildScriptModel")?.get()
+
+        val generateToolchainFileTask = tasks.register("generateToolchainFile", GenerateConanToolchainFileTask::class.java)
+        preBuild.dependsOn(generateToolchainFileTask)
+        syncTask?.dependsOn(generateToolchainFileTask)
+
         listOf("armv8", "armv7", "x86", "x86_64").forEach { architecture ->
             val conanInstallTask = tasks.register("conanInstall-$architecture", ConanInstallTask::class.java) { conanInstallTask ->
                 conanInstallTask.arch.set(architecture)
