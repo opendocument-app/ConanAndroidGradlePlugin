@@ -60,6 +60,18 @@ android {
 }
 ```
 
+### conanfile.txt
+
+ConanInstall task runs conan install on `conanfile.txt`. To use a different conanfile, e.g. `conanfile.py`, or one in a directory other than the module directory, configure tasks with it:
+
+```groovy
+["armv7", "armv8", "x86", "x86_64"].each { arch ->
+    tasks.named("conanInstall-" + arch) {
+        conanfile.set("conanfile.py")
+    }
+}
+```
+
 ## Further reading
 
 https://docs.conan.io/2/examples/cross_build/android/android_studio.html
