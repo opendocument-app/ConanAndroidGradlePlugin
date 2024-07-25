@@ -43,7 +43,7 @@ gradlePlugin {
             id = "app.opendocument.conanandroidgradleplugin"
             displayName = "Conan Android Gradle"
             description = "Plugin which plugs Conan to Android in Gradle"
-            tags = listOf("conan", "android", "gradle")
+            tags = listOf("conan", "android")
             implementationClass = "app.opendocument.ConanAndroidGradlePlugin"
         }
     }
