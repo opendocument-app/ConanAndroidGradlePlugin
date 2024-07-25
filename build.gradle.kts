@@ -32,7 +32,7 @@ kotlin {
 }
 
 group = "app.opendocument"
-version = "0.9.0"
+version = "0.9.1"
 
 gradlePlugin {
     website = "https://github.com/opendocument-app/ConanAndroidGradlePlugin"
