@@ -35,6 +35,11 @@ abstract class ConanInstallTask : Exec() {
     @get:Input
     abstract val profile: Property<String>
 
+
+    init {
+        profile.convention("default")
+    }
+
     @get:OutputDirectory
     val outputDirectory: Provider<Directory> = arch.map { project.layout.buildDirectory.get().dir("conan/$it") }
 
