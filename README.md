@@ -44,3 +44,7 @@ Once the plugin is applied, it needs to be configured. Configuration currently c
 Conan profile can be either a relative path or an absolute path, it could also be a regular conan profile, installed and managed by conan (eg. `default`).
 
 Plugin applies `arch` setting when calling `conan install`, thus all architectures can share the same profile, if no differentiation is needed - `{ profile.set("android") }`.
+
+## Further reading
+
+https://docs.conan.io/2/examples/cross_build/android/android_studio.html
