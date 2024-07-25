@@ -5,12 +5,15 @@ from pathlib import Path
 from getVersion import get_version
 
 
-def str_replace_in_file(file, search, replace):
+def replace_version_in_file(file, prefix, version, suffix):
     r = file.open('r')
-    updated_file_contents = r.read().replace(search, replace)
+    lines = r.readlines()
     r.close()
     with open(file, 'w') as w:
-        w.write(updated_file_contents)
+        for line in lines:
+            if line.startswith(prefix):
+                line = prefix + version + suffix + "\n"
+            w.write(line)
 
 
 def main():
@@ -30,12 +33,8 @@ def main():
             print("newVersion=" + new_version, file=out)
 
     root_dir = Path(__file__).resolve().parent.parent
-    str_replace_in_file(root_dir / "build.gradle.kts",
-                        "version = \"{}\"".format(old_version),
-                        "version = \"{}\"".format(new_version))
-    str_replace_in_file(root_dir / "README.md",
-                        "id 'app.opendocument.conanandroidgradleplugin' version \"{}\" apply false".format(old_version),
-                        "id 'app.opendocument.conanandroidgradleplugin' version \"{}\" apply false".format(new_version))
+    replace_version_in_file(root_dir / "README.md", "    id 'app.opendocument.conanandroidgradleplugin' version \"", old_version, "\" apply false")
+    replace_version_in_file(root_dir / "build.gradle.kts", "version = \"", new_version, "\"")
 
 
 if __name__ == "__main__":
