@@ -1,5 +1,19 @@
 name: release
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      gradle_publish:
+        description: Publish to gradle
+        type: boolean
+        default: true
+      github_release:
+        description: Create a GitHub release
+        type: boolean
+        default: true
+      version_increment:
+        description: Increment version
+        type: boolean
+        default: true
 
 permissions:
   actions: none
@@ -36,12 +50,14 @@ jobs:
           GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
 
       - run: ./gradlew publishPlugins
+        if: ${{ github.event.inputs.gradle_publish == 'true' }}
         env:
           GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
           GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
+        if: ${{ github.event.inputs.github_release == 'true' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: "v${{ steps.getVersion.outputs.version }}"
@@ -49,15 +65,19 @@ jobs:
           bodyFile: "UpcomingReleaseNotes.md"
 
       - run: python ./ci-scripts/incrementVersion.py
+        if: ${{ github.event.inputs.version_increment == 'true' }}
         id: postReleaseVersionIncrement
 
       - uses: stefanzweifel/git-auto-commit-action@v5
+        if: ${{ github.event.inputs.version_increment == 'true' }}
         with:
           commit_message: "Post release version increment to ${{ steps.postReleaseVersionIncrement.outputs.newVersion }} (from ${{ steps.postReleaseVersionIncrement.outputs.oldVersion }})"
           file_pattern: build.gradle.kts README.md
 
       - run: echo -n > UpcomingReleaseNotes.md
+        if: ${{ github.event.inputs.github_release == 'true' }}
       - uses: stefanzweifel/git-auto-commit-action@v5
+        if: ${{ github.event.inputs.github_release == 'true' }}
         with:
           commit_message: "Post release truncation of UpcomingReleaseNotes.md"
           file_pattern: UpcomingReleaseNotes.md
