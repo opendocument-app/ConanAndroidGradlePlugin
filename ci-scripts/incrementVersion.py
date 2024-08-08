@@ -36,11 +36,15 @@ def main():
     replace_version_in_file(root_dir / "README.md", "    id 'app.opendocument.conanandroidgradleplugin' version \"", old_version, "\" apply false")
     replace_version_in_file(root_dir / "build.gradle.kts", "version = \"", new_version, "\"")
 
-    replace_version_in_file(root_dir / "tests" / "0_sample_library" / "build.gradle",
+    replace_version_in_file(root_dir / "tests" / "sample_library" / "build.gradle",
                             prefix="    id 'app.opendocument.conanandroidgradleplugin' version \"",
                             version=new_version,
                             suffix="\" apply false")
-    replace_version_in_file(root_dir / "tests" / "1_cmake_layout" / "build.gradle",
+    replace_version_in_file(root_dir / "tests" / "cmake_layout" / "build.gradle",
+                            prefix="    id 'app.opendocument.conanandroidgradleplugin' version \"",
+                            version=new_version,
+                            suffix="\" apply false")
+    replace_version_in_file(root_dir / "tests" / "no_default_profile_installed" / "build.gradle",
                             prefix="    id 'app.opendocument.conanandroidgradleplugin' version \"",
                             version=new_version,
                             suffix="\" apply false")
