@@ -37,13 +37,6 @@ class ConanAndroidGradlePlugin: Plugin<Project> {
         listOf("armv8", "armv7", "x86", "x86_64").forEach { architecture ->
             val conanInstallTask = tasks.register("conanInstall-$architecture", ConanInstallTask::class.java) { conanInstallTask ->
                 conanInstallTask.arch.set(architecture)
-
-                // Some issue with conan's local cache.
-                // @TODO: isolate and report to conan-client bugtracker
-                // Execute at least one conanInstall before allowing the rest to run in parallel.
-                if (architecture != "armv8") {
-                    conanInstallTask.dependsOn(tasks.named("conanInstall-armv8"))
-                }
             }
             preBuild.dependsOn(conanInstallTask)
             syncTask?.dependsOn(conanInstallTask)
