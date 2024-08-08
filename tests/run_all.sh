@@ -9,3 +9,6 @@ cd $BASEDIR/sample_library
 
 cd $BASEDIR/cmake_layout
 ./gradlew assemble
+
+cd $BASEDIR/no_default_profile_installed
+./gradlew assemble

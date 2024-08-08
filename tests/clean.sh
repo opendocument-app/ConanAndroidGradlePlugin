@@ -12,3 +12,8 @@ rm -r $BASEDIR/cmake_layout/.gradle
 rm -r $BASEDIR/cmake_layout/lib/build
 rm -r $BASEDIR/cmake_layout/lib/.cxx
 rm -r $BASEDIR/cmake_layout/lib/CMakeUserPresets.json
+
+rm -r $BASEDIR/no_default_profile_installed/.gradle
+rm -r $BASEDIR/no_default_profile_installed/lib/build
+rm -r $BASEDIR/no_default_profile_installed/lib/.cxx
+rm -r $BASEDIR/no_default_profile_installed/lib/CMakeUserPresets.json
