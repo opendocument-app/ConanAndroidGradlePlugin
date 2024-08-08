@@ -36,3 +36,5 @@ bin/
 ### Mac OS ###
 .DS_Store
 __pycache__
+tests/**/.cxx
+tests/**/build

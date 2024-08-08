@@ -18,3 +18,11 @@ jobs:
           name: maven-local
           path: ~/.m2
           if-no-files-found: error
+
+      - run: echo "y" | sudo ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --install "ndk;26.3.11579264"
+
+      - run: ./gradlew assemble
+        working-directory: tests/0_sample_library
+
+      - run: ./gradlew assemble
+        working-directory: tests/1_cmake_layout

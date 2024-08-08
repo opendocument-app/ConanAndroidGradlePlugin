@@ -72,7 +72,7 @@ jobs:
         if: ${{ github.event.inputs.version_increment == 'true' }}
         with:
           commit_message: "Post release version increment to ${{ steps.postReleaseVersionIncrement.outputs.newVersion }} (from ${{ steps.postReleaseVersionIncrement.outputs.oldVersion }})"
-          file_pattern: build.gradle.kts README.md
+          file_pattern: build.gradle.kts README.md tests/0_sample_library/build.gradle tests/1_cmake_layout/build.gradle
 
       - run: echo -n > UpcomingReleaseNotes.md
         if: ${{ github.event.inputs.github_release == 'true' }}

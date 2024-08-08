@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.library'
+    id 'app.opendocument.conanandroidgradleplugin'
+}
+
+group = 'com.viliussutkus89'
+
+android {
+    namespace = "com.viliussutkus89.sample_library"
+    compileSdk 34
+    defaultConfig {
+        minSdkVersion 21
+        targetSdk 35
+
+        versionCode 1
+        versionName "1.0.0"
+
+        externalNativeBuild.cmake.arguments(
+            '-DANDROID_STL=c++_shared',
+            "-DCMAKE_TOOLCHAIN_FILE=build/conan/android_toolchain.cmake",
+            "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+        )
+    }
+    ndkVersion "26.3.11579264"
+    externalNativeBuild.cmake.path "CMakeLists.txt"
+}
+
+tasks.named("clean") {
+    def dotCxxDir = layout.projectDirectory.dir(".cxx")
+    doFirst {
+        delete dotCxxDir
+    }
+}
+
+["armv7", "armv8", "x86", "x86_64"].each { arch ->
+    tasks.named("conanInstall-" + arch) {
+        profile.set("conanprofile.txt")
+    }
+}
