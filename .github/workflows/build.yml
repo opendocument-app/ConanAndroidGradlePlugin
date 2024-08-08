@@ -21,7 +21,6 @@ jobs:
 
   test:
     runs-on: ubuntu-22.04
-    needs: build
     strategy:
       fail-fast: false
       matrix:
@@ -35,6 +34,8 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - run: ./gradlew publishToMavenLocal
+
       - run: echo "y" | sudo ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --install "ndk;26.3.11579264"
       - uses: actions/setup-python@v5
         with:
@@ -43,11 +44,6 @@ jobs:
 
       - run: conan profile detect
       - run: conan profile list
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: maven-local
-          path: ~/.m2
 
       - run: ./gradlew assemble
         working-directory: tests/${{ matrix.testcase }}
