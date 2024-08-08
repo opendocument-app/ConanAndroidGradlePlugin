@@ -1,2 +1,0 @@
-- Added support for both cmake_layout and non cmake_layout when generating toolchain file.
-- Added support for specifying conan build profile
