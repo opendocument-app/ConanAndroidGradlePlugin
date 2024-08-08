@@ -41,6 +41,9 @@ jobs:
           python-version: 3.12
       - run: pip install conan
 
+      - run: conan profile detect
+      - run: conan profile list
+
       - uses: actions/download-artifact@v4
         with:
           name: maven-local
