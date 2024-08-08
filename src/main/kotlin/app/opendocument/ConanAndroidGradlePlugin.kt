@@ -47,6 +47,7 @@ class ConanAndroidGradlePlugin: Plugin<Project> {
             }
             preBuild.dependsOn(conanInstallTask)
             syncTask?.dependsOn(conanInstallTask)
+            generateToolchainFileTask.get().dependsOn(conanInstallTask)
         }
     }
 }
