@@ -34,6 +34,7 @@ tasks.named("clean") {
 
 ["armv7", "armv8", "x86", "x86_64"].each { arch ->
     tasks.named("conanInstall-" + arch) {
-        profile.set("conanprofile.txt")
+        profile.set("android-conanprofile.txt")
+        buildProfile.set("ubuntu-22.04-conanprofile.txt")
     }
 }

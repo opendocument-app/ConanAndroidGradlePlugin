@@ -38,10 +38,14 @@ abstract class ConanInstallTask : Exec() {
     abstract val profile: Property<String>
 
     @get:Input
+    abstract val buildProfile: Property<String>
+
+    @get:Input
     abstract val conanfile: Property<String>
 
     init {
         profile.convention("default")
+        buildProfile.convention("default")
         conanfile.convention("conanfile.txt")
     }
 
@@ -58,6 +62,7 @@ abstract class ConanInstallTask : Exec() {
             "--output-folder=" + outputDirectory.get(),
             "--build=missing",
             "--profile:host=" + profile.get(),
+            "--profile:build=" + buildProfile.get(),
             "--settings:host", "arch=" + arch.get(),
         )
         super.exec()
