@@ -19,7 +19,7 @@ def main():
     subprocesses = dict()
     for arch in ("x86", "x86_64"):
         subprocesses[arch] = subprocess.Popen(
-            ["conan", "install", "conanfile.txt", "--profile=profile-default.txt", f"--output-folder=build-{arch}"],
+            ["conan", "install", "conanfile.txt", f"--output-folder=build-{arch}"],
             cwd=this_directory,
         )
 

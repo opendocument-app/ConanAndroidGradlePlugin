@@ -17,5 +17,7 @@ jobs:
       - run: pip install conan==${{matrix.conan_version}}
       - run: conan --version
 
+      - run: conan profile detect
+
       - uses: actions/checkout@v4
       - run: python tests/parallel_conan_install/testcase.py
