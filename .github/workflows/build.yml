@@ -10,6 +10,9 @@ jobs:
         conan_version:
           - 2.5.0
           - 2.6.0
+        serial_mode:
+          - '--serial-mode'
+          - ''
     steps:
       - uses: actions/setup-python@v5
         with:
@@ -20,4 +23,4 @@ jobs:
       - run: conan profile detect
 
       - uses: actions/checkout@v4
-      - run: python tests/parallel_conan_install/testcase.py
+      - run: python tests/parallel_conan_install/testcase.py ${{ matrix.serial_mode }}

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import os.path
 import shutil
 import subprocess
@@ -13,15 +14,24 @@ def main():
 
     this_directory = Path(__file__).resolve().parent
     for arch in ("x86", "x86_64"):
-        if os.path.exists(f"build-{arch}"):
-            shutil.rmtree(f"build-{arch}")
+        if os.path.exists(f"{this_directory}/build-{arch}"):
+            shutil.rmtree(f"{this_directory}/build-{arch}")
+
+    parser = argparse.ArgumentParser(description="Test parallel conan install on an empty ~/.conan2/p")
+    parser.add_argument("--serial-mode", action="store_true")
+    args = parser.parse_args()
+    del parser
 
     subprocesses = dict()
     for arch in ("x86", "x86_64"):
         subprocesses[arch] = subprocess.Popen(
-            ["conan", "install", "conanfile.txt", f"--output-folder=build-{arch}"],
+            ["conan", "install", "conanfile.txt", f"--output-folder=build-{arch}", "--build=missing"],
             cwd=this_directory,
         )
+
+        if args.serial_mode:
+            subprocesses[arch].wait()
+            del subprocesses[arch]
 
     while len(subprocesses) > 0:
         subprocesses2 = dict()
