@@ -13,6 +13,9 @@ jobs:
         serial_mode:
           - '--serial-mode'
           - ''
+        graph_generation_workaround:
+          - '--graph-generation-workaround'
+          - '''
     steps:
       - uses: actions/setup-python@v5
         with:
@@ -23,4 +26,4 @@ jobs:
       - run: conan profile detect
 
       - uses: actions/checkout@v4
-      - run: python tests/parallel_conan_install/testcase.py ${{ matrix.serial_mode }}
+      - run: python tests/parallel_conan_install/testcase.py ${{ matrix.serial_mode }} ${{ matrix.graph_generation_workaround }}

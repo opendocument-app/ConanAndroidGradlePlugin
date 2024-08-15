@@ -19,8 +19,15 @@ def main():
 
     parser = argparse.ArgumentParser(description="Test parallel conan install on an empty ~/.conan2/p")
     parser.add_argument("--serial-mode", action="store_true")
+    parser.add_argument("--graph-generation-workaround", action="store_true")
     args = parser.parse_args()
     del parser
+
+    if args.graph_generation_workaround:
+        subprocess.run(
+            ["conan", "graph", "info", "conanfile.txt"],
+            cwd=this_directory,
+        )
 
     subprocesses = dict()
     for arch in ("x86", "x86_64"):
