@@ -46,7 +46,7 @@ abstract class ConanInstallTask : Exec() {
     init {
         profile.convention("default")
         buildProfile.convention("default")
-        conanfile.convention("conanfile.txt")
+        conanfile.convention(".")
     }
 
     @get:OutputDirectory

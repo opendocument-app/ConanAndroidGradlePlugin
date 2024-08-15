@@ -17,3 +17,8 @@ rm -r $BASEDIR/no_default_profile_installed/.gradle
 rm -r $BASEDIR/no_default_profile_installed/lib/build
 rm -r $BASEDIR/no_default_profile_installed/lib/.cxx
 rm -r $BASEDIR/no_default_profile_installed/lib/CMakeUserPresets.json
+
+rm -r $BASEDIR/conanfile_dot_py/.gradle
+rm -r $BASEDIR/conanfile_dot_py/lib/build
+rm -r $BASEDIR/conanfile_dot_py/lib/.cxx
+rm -r $BASEDIR/conanfile_dot_py/lib/CMakeUserPresets.json

@@ -62,12 +62,15 @@ android {
 
 ### conanfile.txt
 
-ConanInstall task runs conan install on `conanfile.txt`. To use a different conanfile, e.g. `conanfile.py`, or one in a directory other than the module directory, configure tasks with it:
+Task `ConanInstall` runs `conan install .`, dot means current directory, which should contain `conanfile.txt` or `conanfile.py`.
+To use a different directory or a different conanfile, e.g. `backup-conanfile.txt`, configure `ConanInstall` tasks with it:
 
 ```groovy
 ["armv7", "armv8", "x86", "x86_64"].each { arch ->
     tasks.named("conanInstall-" + arch) {
-        conanfile.set("conanfile.py")
+        conanfile.set("subdir")
+        // or
+        conanfile.set("backup-conanfile.txt")
     }
 }
 ```

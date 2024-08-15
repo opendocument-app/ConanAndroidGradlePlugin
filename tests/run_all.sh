@@ -12,3 +12,6 @@ cd $BASEDIR/cmake_layout
 
 cd $BASEDIR/no_default_profile_installed
 ./gradlew assemble
+
+cd $BASEDIR/conanfile_dot_py
+./gradlew assemble

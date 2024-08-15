@@ -48,6 +48,10 @@ def main():
                             prefix="    id 'app.opendocument.conanandroidgradleplugin' version \"",
                             version=new_version,
                             suffix="\" apply false")
+    replace_version_in_file(root_dir / "tests" / "conanfile_dot_py" / "build.gradle",
+                            prefix="    id 'app.opendocument.conanandroidgradleplugin' version \"",
+                            version=new_version,
+                            suffix="\" apply false")
 
 
 if __name__ == "__main__":
