@@ -23,7 +23,7 @@ Conan Android Gradle Plugin is distributed through Gradle Plugin Portal ( `plugi
 To use this plugin, include it in the top level `build.gradle`:
 ```groovy
 plugins {
-    id 'app.opendocument.conanandroidgradleplugin' version "0.9.1" apply false
+    id 'app.opendocument.conanandroidgradleplugin' version "0.9.2" apply false
 }
 ```
 
