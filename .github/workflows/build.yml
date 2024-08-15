@@ -15,7 +15,7 @@ jobs:
           - ''
         graph_generation_workaround:
           - '--graph-generation-workaround'
-          - '''
+          - ''
     steps:
       - uses: actions/setup-python@v5
         with:
