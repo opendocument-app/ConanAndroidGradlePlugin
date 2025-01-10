@@ -43,10 +43,14 @@ abstract class ConanInstallTask : Exec() {
     @get:Input
     abstract val conanfile: Property<String>
 
+    @get:Input
+    abstract val conanExecutable: Property<String>
+
     init {
         profile.convention("default")
         buildProfile.convention("default")
         conanfile.convention(".")
+        conanExecutable.convention("conan")
     }
 
     @get:OutputDirectory
@@ -57,7 +61,7 @@ abstract class ConanInstallTask : Exec() {
 
     override fun exec() {
         commandLine(
-            "conan",
+            conanExecutable.get(),
             "install", conanfile.get(),
             "--output-folder=" + outputDirectory.get(),
             "--build=missing",
