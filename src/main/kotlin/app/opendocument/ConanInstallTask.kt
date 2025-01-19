@@ -57,8 +57,6 @@ abstract class ConanInstallTask : Exec() {
         buildProfile.convention("default")
         conanfile.convention(".")
         conanExecutable.convention("conan")
-        deployer.convention(null)
-        deployerFolder.convention(null)
     }
 
     @get:OutputDirectory
