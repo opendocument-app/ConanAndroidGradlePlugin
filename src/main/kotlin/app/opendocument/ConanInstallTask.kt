@@ -46,11 +46,19 @@ abstract class ConanInstallTask : Exec() {
     @get:Input
     abstract val conanExecutable: Property<String>
 
+    @get:Input
+    abstract val deployer: Property<String>
+
+    @get:Input
+    abstract val deployerFolder: Property<String>
+
     init {
         profile.convention("default")
         buildProfile.convention("default")
         conanfile.convention(".")
         conanExecutable.convention("conan")
+        deployer.convention(null)
+        deployerFolder.convention(null)
     }
 
     @get:OutputDirectory
@@ -68,6 +76,8 @@ abstract class ConanInstallTask : Exec() {
             "--profile:host=" + profile.get(),
             "--profile:build=" + buildProfile.get(),
             "--settings:host", "arch=" + arch.get(),
+            deployer.get()?.let { "--deployer=$it" },
+            deployerFolder.get()?.let { "--deployer-folder=$it" },
         )
         super.exec()
 
