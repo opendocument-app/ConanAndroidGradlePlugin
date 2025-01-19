@@ -64,7 +64,7 @@ abstract class ConanInstallTask : Exec() {
     val conanToolchainFile: Provider<RegularFile> = arch.map { project.layout.buildDirectory.get().file("conan/$it/conan_toolchain.cmake") }
 
     @get:OutputDirectory
-    val deployerFolder: Property<String> = arch.map { project.layout.buildDirectory.get().dir("conan/$it/assets") }
+    val deployerFolder: Property<Directory> = arch.map { project.layout.buildDirectory.get().dir("conan/$it/assets") }
 
     override fun exec() {
         val args = mutableListOf(
