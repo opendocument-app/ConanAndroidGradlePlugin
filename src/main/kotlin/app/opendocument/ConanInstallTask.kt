@@ -68,17 +68,21 @@ abstract class ConanInstallTask : Exec() {
     val conanToolchainFile: Provider<RegularFile> = arch.map { project.layout.buildDirectory.get().file("conan/$it/conan_toolchain.cmake") }
 
     override fun exec() {
-        commandLine(
+        val args = mutableListOf(
             conanExecutable.get(),
             "install", conanfile.get(),
-            "--output-folder=" + outputDirectory.get(),
+            "--output-folder=${outputDirectory.get()}",
             "--build=missing",
-            "--profile:host=" + profile.get(),
-            "--profile:build=" + buildProfile.get(),
-            "--settings:host", "arch=" + arch.get(),
-            deployer.get()?.let { "--deployer=$it" },
-            deployerFolder.get()?.let { "--deployer-folder=$it" },
+            "--profile:host=${profile.get()}",
+            "--profile:build=${buildProfile.get()}",
+            "--settings:host", "arch=${arch.get()}"
         )
+
+        deployer.getOrNull()?.let { args.add("--deployer=$it") }
+        deployerFolder.getOrNull()?.let { args.add("--deployer-folder=$it") }
+
+        commandLine(args)
+
         super.exec()
 
         // conan install creates toolchain in one of two places:
