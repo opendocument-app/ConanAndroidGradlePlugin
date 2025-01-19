@@ -47,10 +47,10 @@ abstract class ConanInstallTask : Exec() {
     abstract val conanExecutable: Property<String>
 
     @get:Input
-    abstract val deployer: Property<String>
+    abstract val deployer: Property<String?>
 
     @get:Input
-    abstract val deployerFolder: Property<String>
+    abstract val deployerFolder: Property<String?>
 
     init {
         profile.convention("default")
