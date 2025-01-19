@@ -49,12 +49,16 @@ abstract class ConanInstallTask : Exec() {
     @get:Input
     abstract val deployer: Property<String?>
 
+    @get:Input
+    abstract val deployerFolder: Property<String?>
+
     init {
         profile.convention("default")
         buildProfile.convention("default")
         conanfile.convention(".")
         conanExecutable.convention("conan")
         deployer.convention(null as String?)
+        deployerFolder.convention(null as String?)
     }
 
     @get:OutputDirectory
@@ -62,9 +66,6 @@ abstract class ConanInstallTask : Exec() {
 
     @get:OutputFile
     val conanToolchainFile: Provider<RegularFile> = arch.map { project.layout.buildDirectory.get().file("conan/$it/conan_toolchain.cmake") }
-
-    @get:OutputDirectory
-    val deployerFolder: Property<Directory> = arch.map { project.layout.buildDirectory.get().dir("conan/$it/assets") }
 
     override fun exec() {
         val args = mutableListOf(
@@ -79,7 +80,9 @@ abstract class ConanInstallTask : Exec() {
 
         if (deployer.isPresent()) {
             args.add("--deployer=${deployer.get()}")
-            args.add("--deployer-folder=${deployerFolder.get()}")
+            if (deployerFolder.isPresent()) {
+                args.add("--deployer-folder=${deployerFolder.get()}")
+            }
         }
 
         commandLine(args)
